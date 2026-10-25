@@ -1,4 +1,4 @@
-create or refresh streaming table video_snapshots
+create or refresh streaming table bronze.video_snapshots
 comment 'Raw video snapshots from YouTube Data API'
 as select 
     *,
@@ -10,7 +10,7 @@ from stream read_files(
     pathGlobFilter => '*.jsonl'
 );
 
-create or refresh streaming table channel_snapshots
+create or refresh streaming table bronze.channel_snapshots
 comment 'Raw channel snapshots from YouTube Data API'
 as select 
     *,
