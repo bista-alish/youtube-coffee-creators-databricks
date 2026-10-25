@@ -1,0 +1,874 @@
+{
+  "datasets": [
+    {
+      "name": "3c5e1c5b",
+      "displayName": "video_performance",
+      "config": {
+        "version": "1.1",
+        "source": "youtube_coffee_creators.gold.video_performance",
+        "dimensions": [
+          {
+            "expr": "source.*"
+          },
+          {
+            "name": "band_label",
+            "expr": "case length_band\r\n  when '0-3 min'   then '00–03 min'\r\n  when '3-10 min'  then '03–10 min'\r\n  when '10-20 min' then '10–20 min'\r\n  when '20-40 min' then '20–40 min'\r\n  else '40+ min'\r\nend",
+            "displayName": "Band Label"
+          },
+          {
+            "name": "day_label",
+            "expr": "left(publish_day_utc, 3)",
+            "displayName": "Day Label"
+          }
+        ],
+        "measures": [
+          {
+            "name": "count",
+            "expr": "COUNT(*)",
+            "comment": "Represents the total number of rows in the dataset. Use this measure to count all",
+            "displayName": "Count"
+          },
+          {
+            "name": "median_engagement",
+            "expr": "MEDIAN(engagement_rate)",
+            "displayName": "Median Engagement",
+            "format": {
+              "type": "percentage",
+              "decimalPlaces": {
+                "type": "max",
+                "places": 2.0
+              },
+              "hideGroupSeparator": false
+            }
+          },
+          {
+            "name": "shorts_upload_share",
+            "expr": "SUM(CASE WHEN format = 'Short (est.)' THEN 1 ELSE 0 END) / COUNT(video_id)",
+            "displayName": "Shorts Upload Share"
+          },
+          {
+            "name": "shorts_view_share",
+            "expr": "SUM(CASE WHEN format = 'Short (est.)' THEN view_count ELSE 0 END) / SUM(view_count)",
+            "displayName": "Shorts View Share"
+          }
+        ]
+      }
+    },
+    {
+      "name": "9784f3fb",
+      "displayName": "channel_summary",
+      "config": {
+        "version": "1.1",
+        "source": "youtube_coffee_creators.gold.channel_summary",
+        "dimensions": [
+          {
+            "expr": "source.*"
+          }
+        ],
+        "measures": [
+          {
+            "name": "count",
+            "expr": "COUNT(*)",
+            "comment": "Represents the total number of rows in the dataset. Use this measure to count all",
+            "displayName": "Count"
+          }
+        ]
+      }
+    }
+  ],
+  "pages": [
+    {
+      "name": "13136217",
+      "displayName": "Content Formats",
+      "layout": [
+        {
+          "widget": {
+            "name": "1ad341b1",
+            "multilineTextboxSpec": {
+              "lines": [
+                "<span style=\"font-size:18px;font-family:Inter\">**Coffee Content Creators: Content Format Analysis**</span>"
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 8,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "creator",
+            "queries": [
+              {
+                "name": "dashboards/01f1d065f71810fababe0784c5726783/datasets/01f1d06656aa1459aa972757d0165238_channel_title",
+                "query": {
+                  "datasetName": "3c5e1c5b",
+                  "fields": [
+                    {
+                      "name": "channel_title",
+                      "expression": "`channel_title`"
+                    },
+                    {
+                      "name": "channel_title_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              },
+              {
+                "name": "dashboards/01f1d065f71810fababe0784c5726783/datasets/01f1d0668e2110eaaf1f966822eaf5fa_channel_title",
+                "query": {
+                  "datasetName": "9784f3fb",
+                  "fields": [
+                    {
+                      "name": "channel_title",
+                      "expression": "`channel_title`"
+                    },
+                    {
+                      "name": "channel_title_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "<span style=\"font-size: 14px;\">Creator</span>",
+                  "fields": []
+                }
+              },
+              "widgetType": "filter-multi-select",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "channel_title",
+                    "queryName": "dashboards/01f1d065f71810fababe0784c5726783/datasets/01f1d06656aa1459aa972757d0165238_channel_title"
+                  },
+                  {
+                    "fieldName": "channel_title",
+                    "queryName": "dashboards/01f1d065f71810fababe0784c5726783/datasets/01f1d0668e2110eaaf1f966822eaf5fa_channel_title"
+                  }
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 8,
+            "y": 0,
+            "width": 2,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "8fad7929",
+            "queries": [
+              {
+                "name": "dashboards/01f1d065f71810fababe0784c5726783/datasets/01f1d06656aa1459aa972757d0165238_format",
+                "query": {
+                  "datasetName": "3c5e1c5b",
+                  "fields": [
+                    {
+                      "name": "format",
+                      "expression": "`format`"
+                    },
+                    {
+                      "name": "format_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "<span style=\"font-size:14px\">Format</span>",
+                  "fields": []
+                }
+              },
+              "widgetType": "filter-multi-select",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "format",
+                    "queryName": "dashboards/01f1d065f71810fababe0784c5726783/datasets/01f1d06656aa1459aa972757d0165238_format"
+                  }
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 10,
+            "y": 0,
+            "width": 2,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "videos-analysed",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "3c5e1c5b",
+                  "fields": [
+                    {
+                      "name": "measure(count)",
+                      "expression": "MEASURE(`count`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "headerAlignment": "center",
+                "title": {
+                  "value": "<span style=\"font-size: 14px;\">Videos Analysed</span>",
+                  "fields": []
+                }
+              },
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "measure(count)",
+                  "format": {
+                    "type": "number-plain",
+                    "abbreviation": "none",
+                    "decimalPlaces": {
+                      "type": "max",
+                      "places": 2
+                    }
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 1,
+            "width": 3,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "5abe0ce6",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "3c5e1c5b",
+                  "fields": [
+                    {
+                      "name": "measure(median_engagement)",
+                      "expression": "MEASURE(`median_engagement`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "headerAlignment": "center",
+                "title": {
+                  "value": "<span style=\"font-size:14px\">Median Engagement Rate</span>",
+                  "fields": []
+                }
+              },
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "measure(median_engagement)"
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 1,
+            "width": 3,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "7bf1c592",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "3c5e1c5b",
+                  "fields": [
+                    {
+                      "name": "median(views_per_day)",
+                      "expression": "MEDIAN(`views_per_day`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "headerAlignment": "center",
+                "title": {
+                  "value": "<span style=\"font-size:14px\">Median Views Per Day</span>",
+                  "fields": []
+                }
+              },
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "median(views_per_day)",
+                  "format": {
+                    "type": "number-plain",
+                    "abbreviation": "compact",
+                    "decimalPlaces": {
+                      "type": "max",
+                      "places": 0
+                    }
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 1,
+            "width": 3,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "median-engagement-rate-by-video-length",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "3c5e1c5b",
+                  "fields": [
+                    {
+                      "name": "band_label",
+                      "expression": "`band_label`"
+                    },
+                    {
+                      "name": "measure(median_engagement)",
+                      "expression": "MEASURE(`median_engagement`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "<span style=\"font-size: 14px;\">Median Engagement Rate by Video Length</span>",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "band_label",
+                  "axis": {
+                    "hideTitle": true
+                  },
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "measure(median_engagement)",
+                  "axis": {
+                    "hideTitle": true,
+                    "hideGrid": true,
+                    "hideLabels": true
+                  },
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "label": {
+                  "show": true
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 3,
+            "width": 6,
+            "height": 5
+          }
+        },
+        {
+          "widget": {
+            "name": "fc76638f",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "9784f3fb",
+                  "fields": [
+                    {
+                      "name": "avg(shorts_share_of_uploads)",
+                      "expression": "AVG(`shorts_share_of_uploads`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "headerAlignment": "center",
+                "title": {
+                  "value": "<span style=\"font-size:14px\">Average Creator Shorts Share</span>",
+                  "fields": []
+                }
+              },
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "avg(shorts_share_of_uploads)",
+                  "format": {
+                    "type": "number-percent",
+                    "decimalPlaces": {
+                      "type": "max",
+                      "places": 2
+                    }
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 9,
+            "y": 1,
+            "width": 3,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "shorts-share-of-uploads-vs-share-of-views",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "9784f3fb",
+                  "fields": [
+                    {
+                      "name": "sum(shorts_share_of_uploads)",
+                      "expression": "SUM(`shorts_share_of_uploads`)"
+                    },
+                    {
+                      "name": "sum(shorts_share_of_views)",
+                      "expression": "SUM(`shorts_share_of_views`)"
+                    },
+                    {
+                      "name": "channel_title",
+                      "expression": "`channel_title`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "showDescription": false,
+                "headerAlignment": "left",
+                "title": {
+                  "value": "<span style=\"font-size: 14px;\">Shorts: </span><span style=\"color: #077A9D;font-size: 14px;\">Share of Uploads</span><span style=\"font-size: 14px;\"> vs </span><span style=\"color: #99DDB4;font-size: 14px;\">Share of Views</span>",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "mark": {
+                "colors": [
+                  null,
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 7
+                  }
+                ],
+                "layout": "group"
+              },
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "scale": {
+                    "type": "quantitative",
+                    "reverse": false
+                  },
+                  "fields": [
+                    {
+                      "fieldName": "sum(shorts_share_of_uploads)",
+                      "displayName": "Shorts Share of Uploads"
+                    },
+                    {
+                      "fieldName": "sum(shorts_share_of_views)",
+                      "displayName": "Shorts Share of Views"
+                    }
+                  ],
+                  "axis": {
+                    "hideGrid": true,
+                    "hideLabels": true,
+                    "hideTitle": true
+                  },
+                  "format": {
+                    "type": "number-percent",
+                    "decimalPlaces": {
+                      "type": "max",
+                      "places": 2
+                    },
+                    "hideGroupSeparator": false
+                  }
+                },
+                "y": {
+                  "fieldName": "channel_title",
+                  "axis": {
+                    "hideTitle": true,
+                    "hideLabels": false
+                  },
+                  "scale": {
+                    "type": "categorical",
+                    "sort": {
+                      "by": "x-reversed"
+                    }
+                  }
+                },
+                "color": {
+                  "legend": {
+                    "position": "bottom",
+                    "hide": true,
+                    "hideTitle": true
+                  }
+                },
+                "label": {
+                  "show": true
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 3,
+            "width": 6,
+            "height": 5
+          }
+        },
+        {
+          "widget": {
+            "name": "shorts-adoption-by-year",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "3c5e1c5b",
+                  "fields": [
+                    {
+                      "name": "channel_title",
+                      "expression": "`channel_title`"
+                    },
+                    {
+                      "name": "yearly(published_at_utc)",
+                      "expression": "DATE_TRUNC(\"YEAR\", `published_at_utc`)"
+                    },
+                    {
+                      "name": "measure(shorts_upload_share)",
+                      "expression": "MEASURE(`shorts_upload_share`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "<span style=\"font-size: 14px;\">Shorts Adoption by Year</span>",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "mark": {
+                "lineShape": "linear"
+              },
+              "widgetType": "line",
+              "encodings": {
+                "x": {
+                  "fieldName": "yearly(published_at_utc)",
+                  "axis": {
+                    "hideTitle": true
+                  },
+                  "scale": {
+                    "type": "temporal"
+                  }
+                },
+                "y": {
+                  "fieldName": "measure(shorts_upload_share)",
+                  "format": {
+                    "type": "number-percent",
+                    "decimalPlaces": {
+                      "type": "exact",
+                      "places": 2
+                    }
+                  },
+                  "axis": {
+                    "hideTitle": true,
+                    "hideGrid": false
+                  },
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "channel_title",
+                  "legend": {
+                    "title": "Creator",
+                    "hideTitle": true,
+                    "position": "top"
+                  },
+                  "scale": {
+                    "type": "categorical",
+                    "mappings": [
+                      {
+                        "value": "James Hoffmann",
+                        "color": {
+                          "themeColorType": "visualizationColors",
+                          "position": 5
+                        }
+                      },
+                      {
+                        "value": "Lance Hedrick",
+                        "color": {
+                          "themeColorType": "visualizationColors",
+                          "position": 9
+                        }
+                      },
+                      {
+                        "value": "Morgan Eckroth",
+                        "color": {
+                          "themeColorType": "visualizationColors",
+                          "position": 3
+                        }
+                      }
+                    ]
+                  }
+                },
+                "label": {
+                  "show": false
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 8,
+            "width": 6,
+            "height": 5
+          }
+        },
+        {
+          "widget": {
+            "name": "uploads-by-day-and-hour-utc",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "3c5e1c5b",
+                  "fields": [
+                    {
+                      "name": "measure(count)",
+                      "expression": "MEASURE(`count`)"
+                    },
+                    {
+                      "name": "publish_hour_utc",
+                      "expression": "`publish_hour_utc`"
+                    },
+                    {
+                      "name": "day_label",
+                      "expression": "`day_label`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "<span style=\"font-size: 14px;\">Uploads by Day and Hour(UTC)</span>",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "widgetType": "heatmap",
+              "encodings": {
+                "x": {
+                  "fieldName": "publish_hour_utc",
+                  "axis": {
+                    "hideGrid": true,
+                    "hideLabels": false,
+                    "hideTitle": true
+                  },
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "y": {
+                  "fieldName": "day_label",
+                  "axis": {
+                    "hideTitle": true
+                  },
+                  "scale": {
+                    "type": "categorical",
+                    "sort": {
+                      "by": "custom-order",
+                      "orderedValues": [
+                        "Mon",
+                        "Tue",
+                        "Wed",
+                        "Thu",
+                        "Fri",
+                        "Sat",
+                        "Sun"
+                      ]
+                    }
+                  }
+                },
+                "color": {
+                  "fieldName": "measure(count)",
+                  "legend": {
+                    "hide": true,
+                    "hideTitle": true,
+                    "position": "bottom"
+                  },
+                  "scale": {
+                    "type": "quantitative",
+                    "colorRamp": {
+                      "mode": "single-hue",
+                      "baseColor": {
+                        "themeColorType": "visualizationColors",
+                        "position": 1
+                      }
+                    },
+                    "reverse": false
+                  }
+                },
+                "label": {
+                  "show": true,
+                  "text": {
+                    "fieldName": "measure(count)",
+                    "format": {
+                      "type": "number-plain",
+                      "abbreviation": "compact",
+                      "decimalPlaces": {
+                        "type": "max",
+                        "places": 2
+                      }
+                    }
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 8,
+            "width": 6,
+            "height": 5
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layoutVersion": "GRID_V1"
+    }
+  ],
+  "uiSettings": {
+    "theme": {
+      "canvasBackgroundColor": {
+        "light": "#FAFAFB",
+        "dark": "#1F272D"
+      },
+      "widgetBackgroundColor": {
+        "light": "#FFFFFF",
+        "dark": "#11171C"
+      },
+      "fontColor": {
+        "light": "#11171C",
+        "dark": "#E8ECF0"
+      },
+      "selectionColor": {
+        "light": "#2272B4",
+        "dark": "#8ACAFF"
+      },
+      "widgetHeaderAlignment": "LEFT",
+      "textBoxVerticalAlign": "VERTICAL_ALIGN_CENTER",
+      "fontSettings": {
+        "widgetTitle": {
+          "fontFamily": "Inter",
+          "fontSize": 12
+        }
+      }
+    },
+    "applyModeEnabled": false
+  }
+}

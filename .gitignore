@@ -1,5 +1,6 @@
 .env
 *.json
+!*.lvdash.json
 .venv/
 __pycache__/
 output/
